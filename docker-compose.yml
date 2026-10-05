@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: chat-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: chat_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./chat_postgres_ok.sql:/docker-entrypoint-initdb.d/chat_postgres_ok.sql
+
+  server:
+    build: .
+    container_name: chat-server
+    command: npm run server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+  client:
+    build: .
+    container_name: chat-client
+    command: npm run client
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+      - postgres
+    environment:
+      SERVER_HOST: server
+      SERVER_PORT: 3000
+      DB_USER: postgres
+      DB_HOST: postgres
+      DB_NAME: chat_db
+      DB_PASSWORD: root
+      DB_PORT: 5432
+
+volumes:
+  postgres_data:
+
+  # para poder hacer andar esto y empaquetarlo todo en y tener el archvio para emviarlo tengo que corregir un teme de un protoclo TCP, una ves corregido este archvio ya esta funcional, entocnes tengo que ejecutar en termiinal: docker compose up

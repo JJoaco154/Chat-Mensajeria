@@ -1,0 +1,13 @@
+{
+  "name": "chat-multicliente",
+  "version": "1.0.0",
+  "description": "Servidor de chat TCP multicliente con PostgreSQL",
+  "main": "server-multicliente.js",
+  "scripts": {
+    "server": "node server-multicliente.js",
+    "client": "node cliente.js"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}
