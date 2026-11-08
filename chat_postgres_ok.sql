@@ -103,12 +103,8 @@ begin
     insert into mensaje(remitente, contenido, fecha)
     values(p_remitente, p_contenido, p_fecha);
    
-    commit;
-
     exception
       when others then
-      rollback;
-
       raise notice 'Ocurrio un error se aplico rollback: %', sqlerrm;
       raise exception 'El error que impidio llevar a cabo la transaccion: %', sqlerrm;
 end;
